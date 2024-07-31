@@ -1,6 +1,7 @@
 ﻿using LMT.Application.Interfaces;
 using LMT.Domain.Entities;
 using LMT.Infrastructure.Data;
+using LMT.Infrastructure.IDGenerators;
 using Microsoft.EntityFrameworkCore;
 
 namespace LMT.Infrastructure.Repositories
@@ -8,16 +9,30 @@ namespace LMT.Infrastructure.Repositories
     public class TaskAllocationFormRepository : ITaskAllocationFormRepository
     {
         private readonly EFDBContext _dbContext;
+        private readonly UniqueIdGenerator _uniqueIdGenerator;
 
         public TaskAllocationFormRepository(EFDBContext dbContext)
         {
             _dbContext = dbContext;
+            _uniqueIdGenerator = new UniqueIdGenerator(_dbContext);
         }
 
         public async Task CreateTaskAllocationFormAsync(T_TaskAllocationForms taskAllocationForm)
         {
-            _dbContext.T_TaskAllocationForms.Add(taskAllocationForm);
-            await _dbContext.SaveChangesAsync();
+            //Generate TaskID
+            taskAllocationForm.Task_Id = _uniqueIdGenerator.GenerateUniqueId();
+
+            try
+            {
+                _dbContext.T_TaskAllocationForms.Add(taskAllocationForm);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        
         }
 
         public async Task DeleteTaskAllocationFormAsync(string taskAllocationFormId)

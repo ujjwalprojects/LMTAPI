@@ -15,6 +15,7 @@ namespace LMT.Domain.Entities
         public int Task_Estd_Id { get; set; }
         public string Task_Assigned_To_Id { get; set; } = string.Empty;
         public string Task_Assigned_To_Name { get; set; } = string.Empty;
+        public DateTime Task_Assigned_Date { get; set; }
         public string Task_Completion_Remarks { get; set; } = string.Empty;
         public DateTime Task_Completion_Date { get; set; } 
     }

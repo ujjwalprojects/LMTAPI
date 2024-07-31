@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace LMT.Api.Controllers.v1
 {
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [ApiVersion("1")]
     [Route("api/v{v:apiVersion}/[controller]")]
     public class TaskAllocationFormController : ControllerBase
@@ -40,6 +40,8 @@ namespace LMT.Api.Controllers.v1
         [HttpGet("{id}")]
         public async Task<ActionResult<T_TaskAllocationFormsDTO>> GetTaskAllocationForm(string id)
         {
+
+            id = Uri.UnescapeDataString(id);
             _logger.LogInformation($"Method GetTaskAllocationForm({id}) invoked.");
 
             var taskAllocationForm = await _taskAllocationFormRepository.GetTaskAllocationFormByIdAsync(id);
@@ -97,6 +99,7 @@ namespace LMT.Api.Controllers.v1
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTaskAllocationForm(string id)
         {
+            id = Uri.UnescapeDataString(id);
             _logger.LogInformation($"Method DeleteTaskAllocationForm({id}) invoked.");
 
             var taskAllocationForm = await _taskAllocationFormRepository.GetTaskAllocationFormByIdAsync(id);
