@@ -22,16 +22,11 @@ namespace LMT.Infrastructure.Repositories
             //Generate TaskID
             taskAllocationForm.Task_Id = _uniqueIdGenerator.GenerateUniqueId();
 
-            try
-            {
-                _dbContext.T_TaskAllocationForms.Add(taskAllocationForm);
-                await _dbContext.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
+           
 
-                throw ex;
-            }
+            _dbContext.T_TaskAllocationForms.Add(taskAllocationForm);
+            await _dbContext.SaveChangesAsync();
+            
         
         }
 

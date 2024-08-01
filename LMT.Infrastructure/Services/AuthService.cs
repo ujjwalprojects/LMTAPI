@@ -16,6 +16,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace LMT.Infrastructure.Services
 {
@@ -26,18 +27,21 @@ namespace LMT.Infrastructure.Services
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
         private readonly AppDBContext _dbContext;
+        private readonly IMapper _mapper;
 
         public AuthService(UserManager<IdentityUser> userManager
                        , SignInManager<IdentityUser> signInManager
                        , RoleManager<IdentityRole> roleManager
                        , IConfiguration configuration
-                       , AppDBContext dbContext)
+                       , AppDBContext dbContext
+                       ,IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _configuration = configuration;
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         public async Task RegisterAsync(RegisterRequest registerRequest)
@@ -257,6 +261,11 @@ namespace LMT.Infrastructure.Services
             }
 
             return true;
+        }
+        public async Task<List<UserListDTO>> GetUserListAsync()
+        {
+            var users = await _dbContext.Users.ToListAsync(); // Assuming your DbContext has a DbSet<ApplicationUser> Users
+            return _mapper.Map<List<UserListDTO>>(users);
         }
     }
 }

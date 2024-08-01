@@ -12,5 +12,6 @@ namespace LMT.Application.Interfaces
         Task<bool> ForgotPasswordAsync(string email);
         Task<bool> ResetPasswordAsync(ResetPasswordRequest resetPasswordRequest);
         Task<bool> ChangePasswordAsync(ChangePasswordRequest changePasswordRequest);
+        Task<List<UserListDTO>> GetUserListAsync();
     }
 }

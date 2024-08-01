@@ -1,8 +1,8 @@
 using Asp.Versioning;
 using LMT.Application.Interfaces;
-using LMT.Application.MappingProfiles;
 using LMT.Infrastructure.Data;
 using LMT.Infrastructure.ExceptionHandling;
+using LMT.Infrastructure.MappingProfiles;
 using LMT.Infrastructure.Repositories;
 using LMT.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using System;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -92,6 +91,7 @@ builder.Services.AddAutoMapper(typeof(TaskAllocationSiteImageProfile));
 builder.Services.AddAutoMapper(typeof(TaskPurposeProfile));
 builder.Services.AddAutoMapper(typeof(WorkerRegistrationProfile));
 builder.Services.AddAutoMapper(typeof(WorkerTypeProfile));
+builder.Services.AddAutoMapper(typeof(UserManagementProfile));
 
 //JWT
 builder.Services.AddAuthentication(options =>
@@ -129,11 +129,13 @@ builder.Services.AddApiVersioning(options =>
     options.ApiVersionReader = ApiVersionReader.Combine(
         new UrlSegmentApiVersionReader(),
         new HeaderApiVersionReader("X-Api-Version"));
-}).AddApiExplorer(options =>
+})
+.AddApiExplorer(options =>
 {
     options.GroupNameFormat = "'v'V";
-    options.SubstituteApiVersionInUrl = true;
+    options.SubstituteApiVersionInUrl = true; // Corrected this line
 });
+
 
 var app = builder.Build();
 

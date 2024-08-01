@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace LMT.Api.Controllers.v1
 {
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [ApiVersion("1")]
     [Route("api/v{v:apiVersion}/[controller]")]
     public class TaskPurposeController : ControllerBase

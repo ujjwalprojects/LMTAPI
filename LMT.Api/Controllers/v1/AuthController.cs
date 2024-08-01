@@ -14,9 +14,11 @@ namespace LMT.Api.Controllers.v1
     {
 
         private readonly IAuthService _authService;
-        public AuthController(IAuthService authService)
+        private readonly ILogger<AuthController> _logger;
+        public AuthController(IAuthService authService, ILogger<AuthController> logger)
         {
             _authService = authService;
+            _logger = logger;
         }
 
         [HttpPost("login")]
@@ -89,6 +91,15 @@ namespace LMT.Api.Controllers.v1
         {
             await _authService.RevokeAllAsync();
             return NoContent();
+        }
+
+        [HttpGet]
+        [Route("get-all-users")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            _logger.LogInformation($"Method GetAllUsers invoked.");
+            var users = await _authService.GetUserListAsync();
+            return Ok(users);
         }
     }
 }
