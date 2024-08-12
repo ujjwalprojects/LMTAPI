@@ -74,6 +74,7 @@ namespace LMT.Infrastructure.Services
                 var authClaims = await GenerateClaimsAsync(user);
                 var token = GenerateJwtToken(authClaims);
                 var refreshToken = GenerateRefreshToken();
+                var userRoles = await _userManager.GetRolesAsync(user);
 
                 _ = int.TryParse(_configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
 
@@ -91,7 +92,13 @@ namespace LMT.Infrastructure.Services
                 return new TokenResponse
                 {
                     AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
-                    RefreshToken = refreshToken
+                    RefreshToken = refreshToken,
+                    role = userRoles,
+                    expiration = token.ValidTo,
+                    profileName = user.UserName,
+                    email = user.Email,
+                    userName = user.UserName,
+                    userId = user.Id
                 };
             }
             return null;

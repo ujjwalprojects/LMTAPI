@@ -33,6 +33,13 @@ namespace LMT.Application.DTOs
     {
         public string AccessToken { get; set; } = string.Empty;
         public string RefreshToken { get; set; } = string.Empty;
+        public string? userId { get; set; }
+        public string? profileName { get; set; }
+        public DateTime? expiration { get; set; }
+        public IList<string>? role { get; set; }
+        public string? phonenumber { get; set; }
+        public string? email { get; set; }
+        public string? userName { get; set; }
     }
     public class ResetPasswordRequest
     {
