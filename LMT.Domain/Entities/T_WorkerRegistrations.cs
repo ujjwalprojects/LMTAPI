@@ -21,5 +21,8 @@ namespace LMT.Domain.Entities
         public int Worker_WorkerType_Id { get; set; } 
         public int Worker_Estd_Id { get; set; } 
         public int Worker_Job_Role_Id { get; set; } 
+        public DateTime Worker_Reg_Valid_From { get; set; } 
+        public DateTime Worker_Reg_Valid_Upto { get; set; } 
+        public DateTime Worker_Rec_Last_Updated { get; set; } 
     }
 }
