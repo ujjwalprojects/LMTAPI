@@ -59,12 +59,12 @@ namespace LMT.Infrastructure.Services
                 throw new Exception("Registration failed");
             }
 
-            if (!await _roleManager.RoleExistsAsync("ADMIN"))
+            if (!await _roleManager.RoleExistsAsync("FIELD_OFFICER"))
             {
-                await _roleManager.CreateAsync(new IdentityRole("ADMIN"));
+                await _roleManager.CreateAsync(new IdentityRole("FIELD_OFFICER"));
             }
 
-            await _userManager.AddToRoleAsync(user, "ADMIN");
+            await _userManager.AddToRoleAsync(user, "FIELD_OFFICER");
         }
         public async Task<TokenResponse> AuthenticateUserAsync(LoginRequest loginRequest)
         {
