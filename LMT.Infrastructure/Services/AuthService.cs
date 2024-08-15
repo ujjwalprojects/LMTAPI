@@ -17,6 +17,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 
 namespace LMT.Infrastructure.Services
 {
@@ -34,7 +35,7 @@ namespace LMT.Infrastructure.Services
                        , RoleManager<IdentityRole> roleManager
                        , IConfiguration configuration
                        , AppDBContext dbContext
-                       ,IMapper mapper)
+                       , IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -109,7 +110,9 @@ namespace LMT.Infrastructure.Services
             var authClaims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName!),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Name, user.UserName!),
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
             };
 
             foreach (var userRole in userRoles)
@@ -142,21 +145,19 @@ namespace LMT.Infrastructure.Services
         {
             if (tokenModel is null)
             {
-                return null;
+                throw new BadHttpRequestException($"Token not found.", StatusCodes.Status400BadRequest);
             }
-
             var principal = GetPrincipalFromExpiredToken(tokenModel.AccessToken!);
             if (principal == null)
             {
-                return null;
+                throw new BadHttpRequestException($"Invalid access token.", StatusCodes.Status401Unauthorized);
             }
+            var user = await _userManager.FindByNameAsync(principal.Identity!.Name);
 
-            var user = await _userManager.FindByNameAsync(principal.Identity.Name);
             var oldRefreshToken = await _dbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == tokenModel.RefreshToken);
-
             if (oldRefreshToken == null || oldRefreshToken.UserId != user.Id || oldRefreshToken.ExpiryDate <= DateTime.Now || oldRefreshToken.IsRevoked)
             {
-                return null;
+                throw new BadHttpRequestException($"Invalid or expired refresh token.", StatusCodes.Status401Unauthorized);
             }
 
             var newAccessToken = GenerateJwtToken(principal.Claims.ToList());
