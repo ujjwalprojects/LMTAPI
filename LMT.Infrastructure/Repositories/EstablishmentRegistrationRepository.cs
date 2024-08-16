@@ -16,8 +16,9 @@ namespace LMT.Infrastructure.Repositories
 
         public async Task CreateEstablishmentRegistrationAsync(T_EstablishmentRegistrations establishmentRegistration)
         {
-            _dbContext.T_EstablishmentRegistrations.Add(establishmentRegistration);
-            await _dbContext.SaveChangesAsync();
+                _dbContext.T_EstablishmentRegistrations.Add(establishmentRegistration);
+                await _dbContext.SaveChangesAsync();
+           
         }
 
         public async Task DeleteEstablishmentRegistrationAsync(int establishmentRegistrationId)
@@ -33,6 +34,17 @@ namespace LMT.Infrastructure.Repositories
         public async Task<List<T_EstablishmentRegistrations>> GetAllEstablishmentRegistrationsAsync()
         {
             return await _dbContext.T_EstablishmentRegistrations.ToListAsync();
+        }
+
+        public async Task<List<T_EstablishmentRegistrations>> GetAllEstablishmentRegistrationsAsync(string searchText)
+        {
+            if (string.IsNullOrEmpty(searchText))
+            {
+                return await _dbContext.T_EstablishmentRegistrations.ToListAsync();
+            }
+            return await _dbContext.T_EstablishmentRegistrations
+                .Where(c => c.Estd_Name.Contains(searchText) || c.Estd_Reg_No.Contains(searchText) || c.Estd_TradeLicense_No.Contains(searchText))
+                .ToListAsync();
         }
 
         public async Task<T_EstablishmentRegistrations> GetEstablishmentRegistrationByIdAsync(int establishmentRegistrationId)

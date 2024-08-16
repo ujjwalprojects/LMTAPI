@@ -5,10 +5,11 @@ namespace LMT.Application.Interfaces
     public interface IWorkerRegistrationRepository
     {
         Task<List<T_WorkerRegistrations>> GetAllWorkerRegistrationsAsync();
-        Task<T_WorkerRegistrations> GetWorkerRegistrationByIdAsync(int workerRegistrationId);
+        Task<List<T_WorkerRegistrations>> GetAllWorkerRegistrationsAsync(string searchText);
+        Task<T_WorkerRegistrations> GetWorkerRegistrationByIdAsync(long workerRegistrationId);
         Task CreateWorkerRegistrationAsync(T_WorkerRegistrations workerRegistration);
         Task UpdateWorkerRegistrationAsync(T_WorkerRegistrations workerRegistration);
-        Task DeleteWorkerRegistrationAsync(int workerRegistrationId);
+        Task DeleteWorkerRegistrationAsync(long workerRegistrationId);
     }
 
 }

@@ -35,10 +35,17 @@ namespace LMT.Api.Controllers.v1
             var workerRegistrations = await _workerRegistrationRepository.GetAllWorkerRegistrationsAsync();
             return Ok(_mapper.Map<List<T_WorkerRegistrationsDTO>>(workerRegistrations));
         }
+        [HttpGet("workers-list")]
+        public async Task<ActionResult<List<T_WorkerRegistrationsDTO>>> GetWorkerRegistrations(string searchText)
+        {
+            _logger.LogInformation("Method GetWorkerRegistrations invoked.");
 
+            var workerRegistrations = await _workerRegistrationRepository.GetAllWorkerRegistrationsAsync(searchText);
+            return Ok(_mapper.Map<List<T_WorkerRegistrationsDTO>>(workerRegistrations));
+        }
         // GET: api/WorkerRegistration/id
         [HttpGet("{id}")]
-        public async Task<ActionResult<T_WorkerRegistrationsDTO>> GetWorkerRegistration(int id)
+        public async Task<ActionResult<T_WorkerRegistrationsDTO>> GetWorkerRegistration(long id)
         {
             _logger.LogInformation($"Method GetWorkerRegistration({id}) invoked.");
 
@@ -95,7 +102,7 @@ namespace LMT.Api.Controllers.v1
 
         // DELETE: api/WorkerRegistration/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteWorkerRegistration(int id)
+        public async Task<IActionResult> DeleteWorkerRegistration(long id)
         {
             _logger.LogInformation($"Method DeleteWorkerRegistration({id}) invoked.");
 
@@ -110,7 +117,7 @@ namespace LMT.Api.Controllers.v1
             return NoContent();
         }
 
-        private async Task<bool> WorkerRegistrationExists(int id)
+        private async Task<bool> WorkerRegistrationExists(long id)
         {
             var workerRegistration = await _workerRegistrationRepository.GetWorkerRegistrationByIdAsync(id);
             return workerRegistration != null;
