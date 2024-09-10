@@ -15,5 +15,7 @@ namespace LMT.Domain.Entities
         public DateTime Estd_Reg_Valid_From { get; set; }
         public DateTime Estd_Reg_Valid_Upto { get; set; }
         public DateTime Estd_Rec_Last_Updated { get; set; }
+        public string Estd_Remarks { get; set; } = string.Empty;
+        public string Estd_Description { get; set; } = string.Empty;
     }
 }

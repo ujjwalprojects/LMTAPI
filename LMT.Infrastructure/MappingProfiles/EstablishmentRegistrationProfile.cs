@@ -14,6 +14,7 @@ namespace LMT.Infrastructure.MappingProfiles
         public EstablishmentRegistrationProfile()
         {
             CreateMap<T_EstablishmentRegistrations, T_EstablishmentRegistrationsDTO>().ReverseMap();
+            CreateMap<T_EstablishmentRegistrations, GetT_EstablishmentDTO>().ReverseMap();
         }
     }
 }

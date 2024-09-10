@@ -27,20 +27,20 @@ namespace LMT.Api.Controllers.v1
 
         // GET: api/EstablishmentRegistration
         [HttpGet]
-        public async Task<ActionResult<List<T_EstablishmentRegistrationsDTO>>> GetEstablishmentRegistrations()
+        public async Task<ActionResult<IEnumerable<GetT_EstablishmentDTO>>> GetEstablishmentRegistrations()
         {
             _logger.LogInformation("Method GetEstablishmentRegistrations invoked.");
 
             var establishmentRegistrations = await _establishmentRegistrationRepository.GetAllEstablishmentRegistrationsAsync();
-            return Ok(_mapper.Map<List<T_EstablishmentRegistrationsDTO>>(establishmentRegistrations));
+            return Ok(_mapper.Map<List<GetT_EstablishmentDTO>>(establishmentRegistrations));
         }
         [HttpGet("establishment-list")]
-        public async Task<ActionResult<List<T_EstablishmentRegistrationsDTO>>> GetEstablishmentRegistrations(string? searchText)
+        public async Task<ActionResult<IEnumerable<GetT_EstablishmentDTO>>> GetEstablishmentRegistrations(string? searchText)
         {
             _logger.LogInformation("Method GetEstablishmentRegistrations by searchText invoked.");
 
             var establishmentRegistrations = await _establishmentRegistrationRepository.GetAllEstablishmentRegistrationsAsync(searchText);
-            return Ok(_mapper.Map<List<T_EstablishmentRegistrationsDTO>>(establishmentRegistrations));
+            return Ok(_mapper.Map<List<GetT_EstablishmentDTO>>(establishmentRegistrations));
         }
 
 
