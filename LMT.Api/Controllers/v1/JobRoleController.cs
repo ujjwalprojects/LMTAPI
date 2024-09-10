@@ -3,14 +3,13 @@ using AutoMapper;
 using LMT.Application.DTOs;
 using LMT.Application.Interfaces;
 using LMT.Domain.Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LMT.Api.Controllers.v1
 {
     [ApiController]
-    [Authorize]
+    // [Authorize]
     [ApiVersion("1")]
     [Route("api/v{v:apiVersion}/[controller]")]
     public class JobRoleController : ControllerBase
@@ -63,14 +62,14 @@ namespace LMT.Api.Controllers.v1
         }
 
         // PUT: api/JobRole/id
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutJobRole(int id, M_JobRolesDTO jobRoleDto)
+        [HttpPut]
+        public async Task<IActionResult> PutJobRole(M_JobRolesDTO jobRoleDto)
         {
-            _logger.LogInformation($"Method PutJobRole({id}) invoked.");
+            _logger.LogInformation($"Method PutJobRole({jobRoleDto.Job_Role_Id}) invoked.");
 
-            if (id != jobRoleDto.Job_Role_Id)
+            if (jobRoleDto.Job_Role_Id <= 0)
             {
-                throw new BadHttpRequestException($"JobRole with Id {id} not found.", StatusCodes.Status400BadRequest);
+                throw new BadHttpRequestException($"JobRole with Id {jobRoleDto.Job_Role_Id} not found.", StatusCodes.Status400BadRequest);
             }
 
             var jobRole = _mapper.Map<M_JobRoles>(jobRoleDto);
@@ -80,7 +79,7 @@ namespace LMT.Api.Controllers.v1
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await JobRoleExists(id))
+                if (!await JobRoleExists(jobRoleDto.Job_Role_Id))
                 {
                     return NotFound();
                 }

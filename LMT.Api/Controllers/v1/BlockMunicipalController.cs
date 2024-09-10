@@ -3,14 +3,13 @@ using AutoMapper;
 using LMT.Application.DTOs;
 using LMT.Application.Interfaces;
 using LMT.Domain.Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LMT.Api.Controllers.v1
 {
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [ApiVersion("1")]
     [Route("api/v{v:apiVersion}/[controller]")]
     public class BlockMunicipalController : ControllerBase
@@ -62,15 +61,15 @@ namespace LMT.Api.Controllers.v1
             return CreatedAtAction(nameof(GetBlockMunicipal), new { id = blockMunicipal.Block_Municipal_Id }, _mapper.Map<M_BlockMunicipalsDTO>(blockMunicipal));
         }
 
-        // PUT: api/BlockMunicipal/id
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutBlockMunicipal(int id, M_BlockMunicipalsDTO blockMunicipalDto)
+        // PUT: api/BlockMunicipal/
+        [HttpPut]
+        public async Task<IActionResult> PutBlockMunicipal(M_BlockMunicipalsDTO blockMunicipalDto)
         {
-            _logger.LogInformation($"Method PutBlockMunicipal({id}) invoked.");
+            _logger.LogInformation($"Method PutBlockMunicipal({blockMunicipalDto.Block_Municipal_Id}) invoked.");
 
-            if (id != blockMunicipalDto.Block_Municipal_Id)
+            if (blockMunicipalDto.Block_Municipal_Id <= 0)
             {
-                throw new BadHttpRequestException($"BlockMunicipal with Id {id} not found.", StatusCodes.Status400BadRequest);
+                throw new BadHttpRequestException($"BlockMunicipal with Id {blockMunicipalDto.Block_Municipal_Id} not found.", StatusCodes.Status400BadRequest);
             }
 
             var blockMunicipal = _mapper.Map<M_BlockMunicipals>(blockMunicipalDto);
@@ -80,7 +79,7 @@ namespace LMT.Api.Controllers.v1
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await BlockMunicipalExists(id))
+                if (!await BlockMunicipalExists(blockMunicipalDto.Block_Municipal_Id))
                 {
                     return NotFound();
                 }

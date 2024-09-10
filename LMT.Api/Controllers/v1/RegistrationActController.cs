@@ -3,14 +3,13 @@ using AutoMapper;
 using LMT.Application.DTOs;
 using LMT.Application.Interfaces;
 using LMT.Domain.Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LMT.Api.Controllers.v1
 {
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [ApiVersion("1")]
     [Route("api/v{v:apiVersion}/[controller]")]
     public class RegistrationActController : ControllerBase
@@ -63,14 +62,14 @@ namespace LMT.Api.Controllers.v1
         }
 
         // PUT: api/RegistrationAct/id
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutRegistrationAct(int id, M_RegistrationActsDTO registrationActDto)
+        [HttpPut]
+        public async Task<IActionResult> PutRegistrationAct(M_RegistrationActsDTO registrationActDto)
         {
-            _logger.LogInformation($"Method PutRegistrationAct({id}) invoked.");
+            _logger.LogInformation($"Method PutRegistrationAct({registrationActDto.Reg_Act_Id}) invoked.");
 
-            if (id != registrationActDto.Reg_Act_Id)
+            if (registrationActDto.Reg_Act_Id <= 0)
             {
-                throw new BadHttpRequestException($"RegistrationAct with Id {id} not found.", StatusCodes.Status400BadRequest);
+                throw new BadHttpRequestException($"RegistrationAct with Id {registrationActDto.Reg_Act_Id} not found.", StatusCodes.Status400BadRequest);
             }
 
             var registrationAct = _mapper.Map<M_RegistrationActs>(registrationActDto);
@@ -80,7 +79,7 @@ namespace LMT.Api.Controllers.v1
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await RegistrationActExists(id))
+                if (!await RegistrationActExists(registrationActDto.Reg_Act_Id))
                 {
                     return NotFound();
                 }

@@ -62,14 +62,14 @@ namespace LMT.Api.Controllers.v1
         }
 
         // PUT: api/TaskPurpose/id
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTaskPurpose(int id, M_TaskPurposesDTO taskPurposeDto)
+        [HttpPut]
+        public async Task<IActionResult> PutTaskPurpose(M_TaskPurposesDTO taskPurposeDto)
         {
-            _logger.LogInformation($"Method PutTaskPurpose({id}) invoked.");
+            _logger.LogInformation($"Method PutTaskPurpose({taskPurposeDto.Task_Purpose_Id}) invoked.");
 
-            if (id != taskPurposeDto.Task_Purpose_Id)
+            if (taskPurposeDto.Task_Purpose_Id <= 0)
             {
-                throw new BadHttpRequestException($"TaskPurpose with Id {id} not found.", StatusCodes.Status400BadRequest);
+                throw new BadHttpRequestException($"TaskPurpose with Id {taskPurposeDto.Task_Purpose_Id} not found.", StatusCodes.Status400BadRequest);
             }
 
             var taskPurpose = _mapper.Map<M_TaskPurposes>(taskPurposeDto);
@@ -79,7 +79,7 @@ namespace LMT.Api.Controllers.v1
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await TaskPurposeExists(id))
+                if (!await TaskPurposeExists(taskPurposeDto.Task_Purpose_Id))
                 {
                     return NotFound();
                 }

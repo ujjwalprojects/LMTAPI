@@ -3,14 +3,13 @@ using AutoMapper;
 using LMT.Application.DTOs;
 using LMT.Application.Interfaces;
 using LMT.Domain.Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LMT.Api.Controllers.v1
 {
     [ApiController]
-    [Authorize]
+    // [Authorize]
     [ApiVersion("1")]
     [Route("api/v{v:apiVersion}/[controller]")]
     public class DistrictController : ControllerBase
@@ -63,14 +62,14 @@ namespace LMT.Api.Controllers.v1
         }
 
         // PUT: api/District/id
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutDistrict(int id, M_DistrictsDTO districtDto)
+        [HttpPut]
+        public async Task<IActionResult> PutDistrict(M_DistrictsDTO districtDto)
         {
-            _logger.LogInformation($"Method PutDistrict({id}) invoked.");
+            _logger.LogInformation($"Method PutDistrict({districtDto.District_Id}) invoked.");
 
-            if (id != districtDto.District_Id)
+            if (districtDto.District_Id<=0)
             {
-                throw new BadHttpRequestException($"District with Id {id} not found.", StatusCodes.Status400BadRequest);
+                throw new BadHttpRequestException($"District with Id {districtDto.District_Id} not found.", StatusCodes.Status400BadRequest);
             }
 
             var district = _mapper.Map<M_Districts>(districtDto);
@@ -80,7 +79,7 @@ namespace LMT.Api.Controllers.v1
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await DistrictExists(id))
+                if (!await DistrictExists(districtDto.District_Id))
                 {
                     return NotFound();
                 }

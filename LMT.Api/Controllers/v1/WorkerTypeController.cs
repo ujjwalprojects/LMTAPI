@@ -59,14 +59,14 @@ namespace LMT.Api.Controllers.v1
         }
 
         // PUT: api/WorkerType/id
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutWorkerType(int id, M_WorkerTypesDTO workerTypeDto)
+        [HttpPut]
+        public async Task<IActionResult> PutWorkerType(M_WorkerTypesDTO workerTypeDto)
         {
-            _logger.LogInformation($"Method PutWorkerType({id}) invoked.");
+            _logger.LogInformation($"Method PutWorkerType({workerTypeDto.WorkerType_Id}) invoked.");
 
-            if (id != workerTypeDto.WorkerType_Id)
+            if (workerTypeDto.WorkerType_Id <= 0)
             {
-                throw new BadHttpRequestException($"WorkerType with Id {id} not found.", StatusCodes.Status400BadRequest);
+                throw new BadHttpRequestException($"WorkerType with Id {workerTypeDto.WorkerType_Id} not found.", StatusCodes.Status400BadRequest);
             }
 
             var workerType = _mapper.Map<M_WorkerTypes>(workerTypeDto);
@@ -76,7 +76,7 @@ namespace LMT.Api.Controllers.v1
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await WorkerTypeExists(id))
+                if (!await WorkerTypeExists(workerTypeDto.WorkerType_Id))
                 {
                     return NotFound();
                 }

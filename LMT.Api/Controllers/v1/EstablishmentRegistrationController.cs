@@ -3,14 +3,13 @@ using AutoMapper;
 using LMT.Application.DTOs;
 using LMT.Application.Interfaces;
 using LMT.Domain.Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LMT.Api.Controllers.v1
 {
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [ApiVersion("1")]
     [Route("api/v{v:apiVersion}/[controller]")]
     public class EstablishmentRegistrationController : ControllerBase
@@ -72,14 +71,14 @@ namespace LMT.Api.Controllers.v1
         }
 
         // PUT: api/EstablishmentRegistration/id
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutEstablishmentRegistration(int id, T_EstablishmentRegistrationsDTO establishmentRegistrationDto)
+        [HttpPut]
+        public async Task<IActionResult> PutEstablishmentRegistration(T_EstablishmentRegistrationsDTO establishmentRegistrationDto)
         {
-            _logger.LogInformation($"Method PutEstablishmentRegistration({id}) invoked.");
+            _logger.LogInformation($"Method PutEstablishmentRegistration({establishmentRegistrationDto.Estd_Id}) invoked.");
 
-            if (id != establishmentRegistrationDto.Estd_Id)
+            if (establishmentRegistrationDto.Estd_Id<=0)
             {
-                throw new BadHttpRequestException($"EstablishmentRegistration with Id {id} not found.", StatusCodes.Status400BadRequest);
+                throw new BadHttpRequestException($"EstablishmentRegistration with Id {establishmentRegistrationDto.Estd_Id} not found.", StatusCodes.Status400BadRequest);
             }
 
             var establishmentRegistration = _mapper.Map<T_EstablishmentRegistrations>(establishmentRegistrationDto);
@@ -89,7 +88,7 @@ namespace LMT.Api.Controllers.v1
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await EstablishmentRegistrationExists(id))
+                if (!await EstablishmentRegistrationExists(establishmentRegistrationDto.Estd_Id))
                 {
                     return NotFound();
                 }

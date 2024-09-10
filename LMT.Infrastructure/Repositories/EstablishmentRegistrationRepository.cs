@@ -16,9 +16,9 @@ namespace LMT.Infrastructure.Repositories
 
         public async Task CreateEstablishmentRegistrationAsync(T_EstablishmentRegistrations establishmentRegistration)
         {
-                _dbContext.T_EstablishmentRegistrations.Add(establishmentRegistration);
-                await _dbContext.SaveChangesAsync();
-           
+            _dbContext.T_EstablishmentRegistrations.Add(establishmentRegistration);
+            await _dbContext.SaveChangesAsync();
+
         }
 
         public async Task DeleteEstablishmentRegistrationAsync(int establishmentRegistrationId)

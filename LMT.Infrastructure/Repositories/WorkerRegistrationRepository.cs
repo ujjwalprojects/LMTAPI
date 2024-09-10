@@ -16,9 +16,15 @@ namespace LMT.Infrastructure.Repositories
 
         public async Task CreateWorkerRegistrationAsync(T_WorkerRegistrations workerRegistration)
         {
-            
+            try
+            {
                 _dbContext.T_WorkerRegistrations.Add(workerRegistration);
                 await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
         }
 
@@ -44,8 +50,8 @@ namespace LMT.Infrastructure.Repositories
                 return await _dbContext.T_WorkerRegistrations.ToListAsync();
             }
             return await _dbContext.T_WorkerRegistrations
-                .Where(c => c.Worker_Name.Contains(searchText) 
-                || c.Worker_Aadhaar_No.Contains(searchText) 
+                .Where(c => c.Worker_Name.Contains(searchText)
+                || c.Worker_Aadhaar_No.Contains(searchText)
                 || c.Worker_eShram_No.Contains(searchText)
                 || c.Worker_Contact_No.Contains(searchText))
                 .ToListAsync();

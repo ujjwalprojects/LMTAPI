@@ -3,14 +3,13 @@ using AutoMapper;
 using LMT.Application.DTOs;
 using LMT.Application.Interfaces;
 using LMT.Domain.Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LMT.Api.Controllers.v1
 {
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [ApiVersion("1")]
     [Route("api/v{v:apiVersion}/[controller]")]
     public class StateController : ControllerBase
@@ -63,14 +62,14 @@ namespace LMT.Api.Controllers.v1
         }
 
         // PUT: api/State/id
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutState(int id, M_StatesDTO stateDto)
+        [HttpPut]
+        public async Task<IActionResult> PutState(M_StatesDTO stateDto)
         {
-            _logger.LogInformation($"Method PutState({id}) invoked.");
+            _logger.LogInformation($"Method PutState({stateDto.State_Id}) invoked.");
 
-            if (id != stateDto.State_Id)
+            if (stateDto.State_Id <= 0)
             {
-                throw new BadHttpRequestException($"State with Id {id} not found.", StatusCodes.Status400BadRequest);
+                throw new BadHttpRequestException($"State with Id {stateDto.State_Id} not found.", StatusCodes.Status400BadRequest);
             }
 
             var state = _mapper.Map<M_States>(stateDto);
@@ -80,7 +79,7 @@ namespace LMT.Api.Controllers.v1
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await StateExists(id))
+                if (!await StateExists(stateDto.State_Id))
                 {
                     return NotFound();
                 }
