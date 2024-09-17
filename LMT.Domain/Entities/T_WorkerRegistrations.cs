@@ -24,5 +24,7 @@ namespace LMT.Domain.Entities
         public DateTime Worker_Reg_Valid_From { get; set; }
         public DateTime Worker_Reg_Valid_Upto { get; set; }
         public DateTime Worker_Rec_Last_Updated { get; set; }
+        public string? Worker_Image { get; set; }
+        public string? Worker_IdProof { get; set; }
     }
 }

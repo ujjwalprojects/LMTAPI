@@ -1,4 +1,5 @@
-﻿using LMT.Domain.Entities;
+﻿using LMT.Application.DTOs;
+using LMT.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace LMT.Infrastructure.Data
@@ -19,5 +20,16 @@ namespace LMT.Infrastructure.Data
         public DbSet<T_TaskAllocationSiteImages> T_TaskAllocationSiteImages { get; set; }
         public DbSet<T_WorkerRegistrations> T_WorkerRegistrations { get; set; }
         public DbSet<T_UniqueCodeRecords> T_UniqueCodeRecords { get; set; }
+
+        public DbSet<GetT_WorkerRegistrationDTO> GetT_WorkerRegistrationDTO { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Ignore any primary key mapping if DTO doesn't have a key
+            modelBuilder.Entity<GetT_WorkerRegistrationDTO>().HasNoKey();
+
+            // Other entity configurations
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

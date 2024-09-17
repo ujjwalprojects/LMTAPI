@@ -27,20 +27,20 @@ namespace LMT.Api.Controllers.v1
 
         // GET: api/WorkerRegistration
         [HttpGet]
-        public async Task<ActionResult<List<T_WorkerRegistrationsDTO>>> GetWorkerRegistrations()
+        public async Task<ActionResult<List<GetT_WorkerRegistrationDTO>>> GetWorkerRegistrations()
         {
             _logger.LogInformation("Method GetWorkerRegistrations invoked.");
 
             var workerRegistrations = await _workerRegistrationRepository.GetAllWorkerRegistrationsAsync();
-            return Ok(_mapper.Map<List<T_WorkerRegistrationsDTO>>(workerRegistrations));
+            return Ok(workerRegistrations);
         }
         [HttpGet("workers-list")]
-        public async Task<ActionResult<List<T_WorkerRegistrationsDTO>>> GetWorkerRegistrations(string? searchText)
+        public async Task<ActionResult<IEnumerable<GetT_WorkerRegistrationDTO>>> GetWorkerRegistrations(string? searchText)
         {
             _logger.LogInformation("Method GetWorkerRegistrations invoked.");
 
             var workerRegistrations = await _workerRegistrationRepository.GetAllWorkerRegistrationsAsync(searchText);
-            return Ok(_mapper.Map<List<T_WorkerRegistrationsDTO>>(workerRegistrations));
+            return Ok(workerRegistrations);
         }
         // GET: api/WorkerRegistration/id
         [HttpGet("{id}")]

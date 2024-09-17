@@ -1,4 +1,5 @@
-﻿using LMT.Application.Interfaces;
+﻿using LMT.Application.DTOs;
+using LMT.Application.Interfaces;
 using LMT.Domain.Entities;
 using LMT.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -38,23 +39,33 @@ namespace LMT.Infrastructure.Repositories
             }
         }
 
-        public async Task<List<T_WorkerRegistrations>> GetAllWorkerRegistrationsAsync()
+        public async Task<List<GetT_WorkerRegistrationDTO>> GetAllWorkerRegistrationsAsync()
         {
-            return await _dbContext.T_WorkerRegistrations.ToListAsync();
+            var result = await _dbContext.GetT_WorkerRegistrationDTO
+             .FromSqlRaw("EXEC [dbo].[SP_GetWorkerRegistrations]")
+             .ToListAsync();
+
+            return result;
+            //return await _dbContext.T_WorkerRegistrations.ToListAsync();
         }
 
-        public async Task<List<T_WorkerRegistrations>> GetAllWorkerRegistrationsAsync(string searchText)
+        public async Task<List<GetT_WorkerRegistrationDTO>> GetAllWorkerRegistrationsAsync(string? searchText)
         {
-            if (string.IsNullOrEmpty(searchText))
-            {
-                return await _dbContext.T_WorkerRegistrations.ToListAsync();
-            }
-            return await _dbContext.T_WorkerRegistrations
-                .Where(c => c.Worker_Name.Contains(searchText)
-                || c.Worker_Aadhaar_No.Contains(searchText)
-                || c.Worker_eShram_No.Contains(searchText)
-                || c.Worker_Contact_No.Contains(searchText))
-                .ToListAsync();
+            //if (string.IsNullOrEmpty(searchText))
+            //{
+            //    return await _dbContext.T_WorkerRegistrations.ToListAsync();
+            //}
+            //return await _dbContext.T_WorkerRegistrations
+            //    .Where(c => c.Worker_Name.Contains(searchText)
+            //    || c.Worker_Aadhaar_No.Contains(searchText)
+            //    || c.Worker_eShram_No.Contains(searchText)
+            //    || c.Worker_Contact_No.Contains(searchText))
+            //    .ToListAsync();
+            var result = await _dbContext.GetT_WorkerRegistrationDTO
+           .FromSqlRaw("EXEC [dbo].[SP_GetWorkerRegistrationsWithSearch] @SearchTerm = {0}", searchText ?? (object)DBNull.Value)
+           .ToListAsync();
+
+            return result;
         }
 
         public async Task<T_WorkerRegistrations> GetWorkerRegistrationByIdAsync(long workerRegistrationId)
