@@ -36,7 +36,7 @@ namespace LMT.Infrastructure.Repositories
             return await _dbContext.T_EstablishmentRegistrations.ToListAsync();
         }
 
-        public async Task<List<T_EstablishmentRegistrations>> GetAllEstablishmentRegistrationsAsync(string searchText)
+        public async Task<List<T_EstablishmentRegistrations>> GetAllEstablishmentRegistrationsAsync(string? searchText)
         {
             if (string.IsNullOrEmpty(searchText))
             {
@@ -47,7 +47,7 @@ namespace LMT.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<T_EstablishmentRegistrations> GetEstablishmentRegistrationByIdAsync(int establishmentRegistrationId)
+        public async Task<T_EstablishmentRegistrations?> GetEstablishmentRegistrationByIdAsync(int establishmentRegistrationId)
         {
             return await _dbContext.T_EstablishmentRegistrations.FindAsync(establishmentRegistrationId);
         }

@@ -13,6 +13,8 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Text;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
